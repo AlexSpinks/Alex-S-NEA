@@ -43,7 +43,7 @@ This project uses the following third-party assets and libraries:
 
 ### Art & Graphics
 
-- **2D Simple UI Pack** by OArielG
+- **2D UI Pack** by OArielG
   - UI elements and interface components
 
 - **Knight Sprite Assets**
@@ -55,7 +55,7 @@ This project uses the following third-party assets and libraries:
   - 10 retro-style music tracks (Total: 21:55 minutes)
   - Contact: gwriterstudio@gmail.com
 
-- **Casual Game Sounds**
+- **Casual Game Sounds** by David Mulder
   - Sound effects library
   - License: See Assets/CasualGameSounds/license.pdf
 
