@@ -19,11 +19,11 @@ namespace Pathfinding.Examples {
 
 		/// <summary>Update is called once per frame</summary>
 		void Update () {
-			if (Input.GetKeyDown("p")) {
+			if (Input.GetKeyDown(KeyCode.P)) {
 				PlaceObject();
 			}
 
-			if (Input.GetKeyDown("r")) {
+			if (Input.GetKeyDown(KeyCode.R)) {
 				StartCoroutine(RemoveObject());
 			}
 		}
