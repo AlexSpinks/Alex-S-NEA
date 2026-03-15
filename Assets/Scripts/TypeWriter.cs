@@ -1,16 +1,16 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-[System.Serializable]
+
+[Serializable]
 public class TypewriterMessage
 {
     private float timer = 0;
     private int charIndex = 0;
-    private float timePerChar = 0.05f;
-    [SerializeField]
-    public string currentMsg = null;
+    private const float TimePerChar = 0.05f;
+
+    [SerializeField] public string currentMsg = null;
     private string displayMsg = null;
 
     private Action onActionCallback = null;
@@ -23,15 +23,15 @@ public class TypewriterMessage
 
     public void Callback()
     {
-        if (onActionCallback != null) onActionCallback();
+        onActionCallback?.Invoke();
     }
 
     public string GetFullMsgAndCallback()
     {
-        if (onActionCallback != null) onActionCallback();
-
+        onActionCallback?.Invoke();
         return currentMsg;
     }
+
     public string GetFullMsg()
     {
         return currentMsg;
@@ -41,20 +41,22 @@ public class TypewriterMessage
     {
         return displayMsg;
     }
+
     public void Update()
     {
         if (string.IsNullOrEmpty(currentMsg))
             return;
+
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
-            timer += timePerChar;
+            timer += TimePerChar;
             charIndex++;
 
             displayMsg = currentMsg.Substring(0, charIndex);
             displayMsg += "<color=#00000000>" + currentMsg.Substring(charIndex) + "</color>";
 
-            if(charIndex >= currentMsg.Length)
+            if (charIndex >= currentMsg.Length)
             {
                 Callback();
                 currentMsg = null;
@@ -64,22 +66,20 @@ public class TypewriterMessage
 
     public bool IsActive()
     {
-        if (string.IsNullOrEmpty(currentMsg))
-            return false;
-
-        return charIndex < currentMsg.Length;
+        return !string.IsNullOrEmpty(currentMsg) && charIndex < currentMsg.Length;
     }
 }
+
 public class TypeWriter : MonoBehaviour
 {
-    public Text TextComponent;
+    public Text textComponent;
+
     private static TypeWriter instance;
     private List<TypewriterMessage> messages = new List<TypewriterMessage>();
-
     private TypewriterMessage currentMsg = null;
-    private int msgindex = 0;
+    private int msgIndex = 0;
 
-    public static void add(string msg, Action callback = null)
+    public static void Add(string msg, Action callback = null)
     {
         TypewriterMessage typeMsg = new TypewriterMessage(msg, callback);
         instance.messages.Add(typeMsg);
@@ -97,31 +97,31 @@ public class TypeWriter : MonoBehaviour
 
     private void Update()
     {
-        if(messages.Count > 0 && currentMsg != null)
+        if (messages.Count > 0 && currentMsg != null)
         {
             currentMsg.Update();
-            TextComponent.text = currentMsg.GetMsg();
+            textComponent.text = currentMsg.GetMsg();
         }
     }
+
     public void WriteNextMessageInQueue()
     {
-        if(currentMsg !=null&& currentMsg.IsActive())
+        if (currentMsg != null && currentMsg.IsActive())
         {
-            TextComponent.text = currentMsg.GetFullMsgAndCallback();
+            textComponent.text = currentMsg.GetFullMsgAndCallback();
             currentMsg = null;
             return;
         }
 
-        msgindex++;
+        msgIndex++;
 
-        if(msgindex >= messages.Count)
+        if (msgIndex >= messages.Count)
         {
             currentMsg = null;
-            TextComponent.text = "";
+            textComponent.text = "";
             return;
         }
 
-        currentMsg = messages[msgindex];
-    }   
-    
+        currentMsg = messages[msgIndex];
+    }
 }

@@ -1,64 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
-    Animator am;
-    PlayerMovement pm;
-    SpriteRenderer sr;
+    private Animator _animator;
+    private PlayerMovement _playerMovement;
+    private SpriteRenderer _sr;
     public Health playerHealth;
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
-        am = GetComponent<Animator>();
-        pm = GetComponent<PlayerMovement>();
-        sr = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
+        _playerMovement = GetComponent<PlayerMovement>();
+        _sr = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (pm.moveDir.x !=0 || pm.moveDir.y != 0)
-        {
-            am.SetBool("Move", true);
-            SpriteDirectionChecker();
+        bool isMoving = _playerMovement.moveDir.x != 0 || _playerMovement.moveDir.y != 0;
+        _animator.SetBool("Move", isMoving);
 
-        }
-        else
+        if (isMoving)
         {
-            am.SetBool("Move", false);
+            UpdateSpriteDirection();
+        }
 
-        }
-        if (playerHealth.currentHealth<=0 )
-        {
-            am.SetBool("Dead", true);
-            SpriteDirectionChecker();
-        }
-        else
-        {
-            am.SetBool("Dead", false);
-            
+        bool isDead = playerHealth.currentHealth <= 0;
+        _animator.SetBool("Dead", isDead);
 
-        }
-        if (Input.GetKeyDown("space"))
+        if (isDead)
         {
-            am.SetBool("Attack",true);
+            UpdateSpriteDirection();
         }
-        else
-        {
-            am.SetBool("Attack", false);
-        }
+
+        _animator.SetBool("Attack", Input.GetKeyDown(KeyCode.Space));
     }
-    void SpriteDirectionChecker()
+
+    private void UpdateSpriteDirection()
     {
-        if (pm.lastHorizontalVector < 0)
-        {
-            sr.flipX = true;
-        }
-        else
-        {
-            sr.flipX = false;
-        }
+        _sr.flipX = _playerMovement.lastHorizontalVector < 0;
     }
 }

@@ -1,64 +1,56 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class InteractPlayer : MonoBehaviour
 {
-    Animator am;
-    bool collect = false;
-    public AudioSource pickup;
     public GameObject coin;
-    public SpriteRenderer sr;
-    private Score Score;
 
+    private AudioSource _pickup;
+    private SpriteRenderer _sr;
+    private Score _scoreComponent;
+    private bool _collect;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        pickup = GetComponent<AudioSource>();
-        sr = GetComponent<SpriteRenderer>();
-       
-
+        _pickup = GetComponent<AudioSource>();
+        _sr = GetComponent<SpriteRenderer>();
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            
-
-            collect = true;
-            
-        }
-        else
-        {
-            collect = false;
+            _collect = true;
+            _scoreComponent = collision.GetComponent<Score>();
         }
     }
-    // Update is called once per frame
-    void Update()
+
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collect == true)
+        if (collision.CompareTag("Player"))
         {
-            var scorecomponent = GetComponent<Score>();
-            if (scorecomponent != null)
+            _collect = false;
+        }
+    }
+
+    private void Update()
+    {
+        if (_collect)
+        {
+            if (_scoreComponent != null)
             {
-                scorecomponent.ScoreUP(1);
+                _scoreComponent.ScoreUP(1);
             }
             StartCoroutine(ChangeSprite());
-           
-            collect = false;
-
+            _collect = false;
         }
     }
 
     private IEnumerator ChangeSprite()
     {
-
-        pickup.Play();
-        sr.enabled = false;
+        _pickup.Play();
+        _sr.enabled = false;
         yield return new WaitForSeconds(2f);
         Destroy(coin);
-        
-    }   
+    }
 }
