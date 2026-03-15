@@ -1,46 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour
 {
-    Animator am;
-    bool touch = false;
+    [SerializeField] private int nextSceneIndex = 2;
+
     public SpriteRenderer srr;
     public Sprite open;
     public Sprite Closed;
-    // Start is called before the first frame update
-    void Start()
+
+    private Animator _animator;
+    private bool _playerInRange;
+
+    private void Start()
     {
-        am = GetComponent<Animator>();
-        srr = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            touch = true;
-           
-        }
-        else
-        {
-            touch = false;
+            _playerInRange = true;
         }
     }
-    // Update is called once per frame
-    void Update()
+
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (touch == true)
+        if (collision.CompareTag("Player"))
         {
-
-           
-            am.SetBool ("open" , true);
-
+            _playerInRange = false;
+            _animator.SetBool("open", false);
         }
-        if (touch==true&&Input.GetKeyDown("f"))
+    }
+
+    private void Update()
+    {
+        if (_playerInRange)
         {
-            SceneManager.LoadScene(2);
+            _animator.SetBool("open", true);
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                SceneManager.LoadScene(nextSceneIndex);
+            }
         }
     }
 }
