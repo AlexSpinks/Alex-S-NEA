@@ -5,6 +5,10 @@ public class Door : MonoBehaviour
 {
     [SerializeField] private int nextSceneIndex = 2;
 
+    public SpriteRenderer srr;
+    public Sprite open;
+    public Sprite Closed;
+
     private Animator _animator;
     private bool _playerInRange;
 

@@ -72,7 +72,7 @@ public class TypewriterMessage
 
 public class TypeWriter : MonoBehaviour
 {
-    public Text textComponent;
+    public Text TextComponent;
 
     private static TypeWriter instance;
     private List<TypewriterMessage> messages = new List<TypewriterMessage>();
@@ -100,7 +100,7 @@ public class TypeWriter : MonoBehaviour
         if (messages.Count > 0 && currentMsg != null)
         {
             currentMsg.Update();
-            textComponent.text = currentMsg.GetMsg();
+            TextComponent.text = currentMsg.GetMsg();
         }
     }
 
@@ -108,7 +108,7 @@ public class TypeWriter : MonoBehaviour
     {
         if (currentMsg != null && currentMsg.IsActive())
         {
-            textComponent.text = currentMsg.GetFullMsgAndCallback();
+            TextComponent.text = currentMsg.GetFullMsgAndCallback();
             currentMsg = null;
             return;
         }
@@ -118,7 +118,7 @@ public class TypeWriter : MonoBehaviour
         if (msgIndex >= messages.Count)
         {
             currentMsg = null;
-            textComponent.text = "";
+            TextComponent.text = "";
             return;
         }
 

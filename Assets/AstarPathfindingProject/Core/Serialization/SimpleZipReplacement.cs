@@ -1,6 +1,5 @@
 #if ASTAR_NO_ZIP
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Pathfinding.Serialization.Zip {
